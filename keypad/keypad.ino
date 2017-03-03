@@ -19,38 +19,30 @@ byte rowPins[rows] = {7, 6, 5, 4}; //pins 7, 6, 5, and 4 for the rows
 byte colPins[cols] = {3, 2, 1, 0}; //pins 3, 2, 1, and 0 for the columns
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, rows, cols); //sets up keypad
 
-void setup()
-{
+void setup() {
   pinMode(lockPin, OUTPUT); //lockPin outputs
   pinMode(redPin, OUTPUT); //redPin outputs
   pinMode(bluePin, OUTPUT); //bluePin outputs
   pinMode(greenPin, OUTPUT); //greenPin outputs
 }
 
-void loop()
-{
+void loop() {
   boolean wrong = false; //no wrong flags (wrong starts out as false)
-  while(waitForKey() != '*'){}; //while the “*” key is not pressed, do nothing
-  for(int i = 0; i < 4; i++) //if "*" is pressed, loops 4 times, 1 for each digit of the secret code
-  {
+  while (waitForKey() != '*') {}; //while the “*” key is not pressed, do nothing
+  for (int i = 0; i < 4; i++) { //if "*" is pressed, loops 4 times, 1 for each digit of the secret code
     digitalWrite(bluePin, HIGH); //blue light to indicate inputting of code
     char key = waitForKey(); //variable key equals the keys pressed
-    if(key != secretCode[i]) wrong = true; //if your input is incorrect, set a wrong flag
+    if (key != secretCode[i]) wrong = true; //if your input is incorrect, set a wrong flag
   }
-  if(!wrong) //if there are no wrong flags (if you input the secret code correctly)
-  {
+  if (!wrong) //if there are no wrong flags (if you input the secret code correctly)
     unlockDoor(); //unlock the door
-  }
   else //if there is a wrong flag (if you do not input the secret code correctly)
-  {
     lockDoor();//keep the door locked
-  }
 }
 
-void unlockDoor() //unlock door function
-{
+void unlockDoor() { //unlock door function
   digitalWrite(bluePin, LOW); //turn off the blue light
-  for(int i = 0; i < 3; i++){ //loops 3 times
+  for (int i = 0; i < 3; i++){ //loops 3 times
     digitalWrite(greenPin, HIGH); //turns on green light
     delay(1000); //for 1 second
     digitalWrite(greenPin, LOW); //turns off green light
@@ -65,12 +57,10 @@ void unlockDoor() //unlock door function
   noTone(buzzerPin); //stop the buzzer sound
 }
 
-void lockDoor()//lock door function
-{
+void lockDoor() { //lock door function
   digitalWrite(bluePin, LOW); //turn off the blue light
   digitalWrite(lockPin, LOW); //no current flow keeps the door locked
-  for(int i = 0; i < 3; i++) //loops 3 times
-  {
+  for (int i = 0; i < 3; i++) { //loops 3 times
     digitalWrite(redPin, HIGH); //turn on the red light
     delay(1000); //for 1 second
     digitalWrite(redPin, LOW); //turn off the red light
@@ -83,12 +73,10 @@ void lockDoor()//lock door function
   noTone(buzzerPin); //stop the buzzer sound
 }
 
-char waitForKey() //key condition function
-{
+char waitForKey() { //key condition function
   char key; //variable key
-  while((key = keypad.getKey()) == 0){}; //waits for the key to be pressed
-  while(!keypad.getKey() == 0){}; //waits for the key to be released
+  while ((key = keypad.getKey()) == 0){}; //waits for the key to be pressed
+  while (!keypad.getKey() == 0){}; //waits for the key to be released
   delay(10); //does this for 10 milliseconds
   return key; //return key to prevent false key presses as a result of key bounce (key debouncing)
 }
-
