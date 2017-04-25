@@ -20,7 +20,7 @@ do {
   digitalWrite(_pin, 1);
   if (_mode != INPUT_PULLUP)
     pinMode(_pin, _mode);
-}while (0)
+} while (0)
 #endif
 
 #define OPEN LOW
